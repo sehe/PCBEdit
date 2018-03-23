@@ -1,0 +1,11 @@
+
+
+1/1/2017
+
+Added HEWinApp.h so changes can be used in future projects...
+
+for: xmlsettingsstore.cpp so app settings don't have to be saved in the regestry
+it should make the app look extensable so each useage mode can keep their own
+	set of app settings
+
+...
