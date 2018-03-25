@@ -1,4 +1,4 @@
-
+#include "spirit.h"
 
 // ...........................................................................
 // SHARED RESOURCES
@@ -10,27 +10,26 @@ namespace SpiritShare
 	template <typename T>
 	struct ts_real_policies : boost::spirit::qi::strict_real_policies<T>
 	{
-		// No exponent
+        // No exponent
 		template <typename Iterator>
 		static bool
-		parse_exp( Iterator& first, Iterator const& last )
-		{
+		parse_exp(Iterator&, Iterator const&) {
 			return false;
 		}
-	};
+    };
 
     namespace qi = boost::spirit::qi;
-	using qi::char_;
-	using qi::double_;
-	using qi::lit;
-	using qi::alpha;
-	using qi::_val;
-	using qi::omit;
-	using qi::no_skip;
-	using qi::int_;
-	using qi::_val;
-	using qi::_1;
-	using qi::on_error;
+    using qi::char_;
+    using qi::double_;
+    using qi::lit;
+    using qi::alpha;
+    using qi::_val;
+    using qi::omit;
+    using qi::no_skip;
+    using qi::int_;
+    using qi::_val;
+    using qi::_1;
+    using qi::on_error;
 
 }//namespace SpiritShare
 

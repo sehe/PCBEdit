@@ -17,7 +17,6 @@
 #include <boost/fusion/include/std_pair.hpp>
 
 #include <stdio.h>
-#include <tchar.h>
 #include <fstream>
 
 //for boost
@@ -71,6 +70,11 @@ typedef             string                          tstring ;
 typedef             istream                         tistream ;
 // etc.
 #endif
+
+#else
+
+typedef             string                          tstring ;
+typedef             istream                         tistream ;
 
 #endif
 

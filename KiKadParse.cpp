@@ -1,16 +1,16 @@
 
 #include "stdafx.h"
 #include "debug.h"
-#include "globals.h"
+//#include "globals.h"
 #include "board.h"
-#include "Share.h"
+//#include "Share.h"
 #include "KiCadParse.h"
 
 // ...........................................................................
 using namespace debug_;
 
 //#define D_KICAD D_WOUT
-#define D_KICAD( x ) __noop
+#define D_KICAD( x ) (std::clog << x)
 
 // variant helpers ...................................................................
 enum variant_pos
@@ -401,6 +401,7 @@ namespace KiCadParser
 			}
 			case e_segment:
 				bTest= true;
+                [[fallthrough]];
 			case e_gr_line:
 			{
 				SP_Line spLine= boost::dynamic_pointer_cast< Line >( targets.top( ).sp_target );
@@ -512,12 +513,13 @@ namespace KiCadParser
 			{
 			case em_fp_text:
 				bTest= true;
+                [[fallthrough]];
 			case em_gr_text:
 			{
 				//only two dests, if more, they can be pushed to a container
 				target t;
 				t.name= pair.first;
-				t.id= bTest ? e_fp_text : em_gr_text;
+				t.id= bTest ? static_cast<int>(e_fp_text) : static_cast<int>(em_gr_text);
 				if( bTest )
 				{
 					SP_SymbolSet spP;
@@ -557,14 +559,14 @@ namespace KiCadParser
 				pP->flags|= get_pad_type( pair, 1 );
 				pP->flags|= get_pad_shape( pair, 2 );
 				pC->vsp_pins.push_back( pP );
-				push_target( target( pair.first, e_pad, NULL, pP ) );
+				push_target( target( pair.first, e_pad, 0, pP ) );
 				break;
 			}
 			case em_fp_line:
 			{
 				SP_Line pL= SP_Line( new Line );
 				pC->ssp_other.insert( pL );
-				push_target( target( pair.first, e_fp_line, NULL, pL ) );
+				push_target( target( pair.first, e_fp_line, 0, pL ) );
 				break;
 			}
 
@@ -655,7 +657,7 @@ namespace KiCadParser
 
 		case e_layers:
 			SP_Layer l= SP_Layer( new Layer );
-			l->id= _tstoi( pair.first.c_str( ) );
+			l->id= std::stoi( pair.first.c_str( ) );
 			if( get_str( pair.second, 1 ) == _T("signal") )
 				l->type= PCLT_SIGNAL;
 			else

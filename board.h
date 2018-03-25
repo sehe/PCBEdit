@@ -18,13 +18,13 @@ atoi	_tstoi
 */
 #ifndef TEST_PARSER
 #ifndef GLOBALS_H
-#include <globals.h>
+//#include <globals.h>
 #endif
 #endif
 
 #ifndef AFX_STATIC
-	#define AFX_STATIC extern
-	#define AFX_STATIC_DATA extern __declspec(selectany)
+	#define AFX_STATIC
+	#define AFX_STATIC_DATA static
 #endif
 
 // ..........................................................................
@@ -74,7 +74,7 @@ namespace PCBItemTypes
 		_T("Wires"),
 		_T("Drill"),
 	};
-};
+}
 extern AStrType< PCBItemTypes::eItemTypes > typeSet;
 
 
@@ -107,8 +107,8 @@ enum pad_flag
 
 	PCFS_TYPE_MASK= PCSF_STD | PCSF_SMD | PCSF_VIA,
 };
-DEFINE_ENUM_FLAG_OPERATORS( pad_flag )
-//inline pad_flag operator |= (pad_flag& a, pad_flag& b) { return( a= pad_flag( ((int)a) | ((int)b) ) ); }
+//DEFINE_ENUM_FLAG_OPERATORS( pad_flag )
+inline pad_flag& operator |= (pad_flag& a, pad_flag b) { return (a= static_cast<pad_flag>(static_cast<int>(a) | static_cast<int>(b))); }
 // ..........................................................................
 enum layerType
 {
@@ -286,14 +286,14 @@ struct Connect : public Base
 
 	Connect( )
 		:Base( PCBItemTypes::ptypeConnect )
+		,net( 0 )
+		,pt1( 0, 0 )
+		,pt2( 0, 0 )
+		,rotate( 0 )
 		,flags( PCSF_NULL )
 		,size( 0 )
 		,clearance( 0 )
 		,mask( 0 )
-		,net( 0 )
-		,rotate( 0 )
-		,pt1( 0, 0 )
-		,pt2( 0, 0 )
 	{ }
 
 	bool operator == ( bg_point& in ) { return in == pt1; }
@@ -343,9 +343,9 @@ struct Component : public Base
 
 	Component( )
 		:Base( PCBItemTypes::ptypeComponent )
-		,rotate( 0 )
 		,sp_refLabel( new SymbolSet )
 		,sp_valueLabel( new SymbolSet )
+		,rotate( 0 )
 	{ }
 
 	virtual bool operator < ( const boost::shared_ptr< Component >& a ) const

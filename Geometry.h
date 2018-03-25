@@ -83,7 +83,7 @@ namespace boost { namespace geometry
 
 
 }} // namespace boost::geometry
-BOOST_GEOMETRY_REGISTER_POINT_2D( bg_point_< TPCB_NUM >, TPCB_NUM, bg::cs::cartesian, x, y );
+BOOST_GEOMETRY_REGISTER_POINT_2D( bg_point_< TPCB_NUM >, TPCB_NUM, bg::cs::cartesian, x, y )
 namespace boost { namespace geometry { namespace traits {
 }}}
 

@@ -1,5 +1,6 @@
 // ...........................................................................
 //KiCadParse.h
+#include "stdafx.h"
 
 // ...........................................................................
 class PCBoard;
@@ -21,7 +22,9 @@ typedef std::pair< std::tstring, values > pair_type;
 template< class Ty >
 class estack : public std::stack< Ty >
 {
+    using std::stack<Ty>::c;
 public:
+    using std::stack<Ty>::size;
 	Ty& bottom( ) { return *c.begin( ); }
 	Ty& down( size_t i ) { assert( i < size( ) && i > 0 ); return *( c.end( ) - i ); }
 };
@@ -30,19 +33,19 @@ public:
 //debug
 namespace debug_
 {
-	static char* which_str[ ]= {
+	static char const* which_str[ ]= {
 		"uint",
 		"double",
 		"string",
 	};
-};
+}
 
 // ...........................................................................
 namespace boost {
 
-	std::wostream& operator<<(std::wostream& out, const value& v );
-	std::wostream& operator<<(std::wostream& out, const values& v );
-    std::wostream& operator<<(std::wostream& out, const pair_type& v);
+	std::ostream& operator<<(std::ostream& out, const value& v );
+	std::ostream& operator<<(std::ostream& out, const values& v );
+    std::ostream& operator<<(std::ostream& out, const pair_type& v);
 }
 
 // ...........................................................................
@@ -93,7 +96,8 @@ namespace KiCadParser
 		size_t count;
 
 		s_target targets;
-		void push_target( target& t ) { targets.push( t ); }
+		void push_target( target const& t ) { targets.push( t ); }
+		void push_target( target && t ) { targets.push( std::move(t) ); }
 		b_map main;
 		b_map general;
 		b_map module;

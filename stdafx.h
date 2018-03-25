@@ -22,23 +22,6 @@
 // turns off MFC's hiding of some common and often safely ignored warning messages
 #define _AFX_ALL_WARNINGS
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-
-#include <afxdisp.h>        // MFC Automation classes
-
-#ifndef _AFX_NO_OLE_SUPPORT
-#include <afxdtctl.h>           // MFC support for Internet Explorer 4 Common Controls
-#endif
-#ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>             // MFC support for Windows Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
-
-#include <afxcontrolbars.h>     // MFC support for ribbons and control bars
-#include <Richedit.h>
-
-#include <stdio.h>
-#include <tchar.h>
 #include <fstream>
 
 //for boost
@@ -65,6 +48,10 @@ typedef             istream                         tistream ;
 // etc.
 #endif
 
+#else // Not UNICODE
+typedef             string                          tstring ;
+typedef             istream                         tistream ;
+
 #endif
 
 } // namespace std
@@ -73,11 +60,13 @@ typedef             istream                         tistream ;
 #include <list>
 #include <stack>
 
-#include <BoostBasic.h>
+//#include <BoostBasic.h>
 
 // BOOST GEOMETERY
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4244)      // we are mixing doubles and __int64
+#endif
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/geometries.hpp>
 #include <boost/geometry/geometries/point.hpp>
@@ -88,7 +77,9 @@ typedef             istream                         tistream ;
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/core/point_order.hpp> 
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 // Optional includes to handle c-arrays as points, std::vectors as linestrings
 //#include <boost/geometry/geometries/adapted/c_array_cartesian.hpp>
@@ -116,24 +107,23 @@ namespace ba= boost::algorithm;
 #include <boost/range/algorithm/find_if.hpp>
 
 #define USE_WINDOWS_EX
-#include <ctrlext.h>
+//#include <ctrlext.h>
 
 #define USING_XML
-#include <xml.h>
+//#include <xml.h>
+
+#define _T(a) a
+using TCHAR = char;
+using __int64 = std::int64_t;
+using LPCTSTR = TCHAR const*;
 
 //this is here so avaliable globaly pcb and xmlsettingsstore
-AFX_STATIC_DATA LPCTSTR DUMMY_REGISTRY_PATH= _T("DummyPCBRegistryPath");
-AFX_STATIC_DATA LPCTSTR USER_SETTINGS_FILENAME= _T("settings.xml");
+static char const* const DUMMY_REGISTRY_PATH= _T("DummyPCBRegistryPath");
+static char const* const USER_SETTINGS_FILENAME= _T("settings.xml");
+
+template <typename T>
+using AStrType = char const*;
 
 // ................................
-#ifdef _UNICODE
-#if defined _M_IX86
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#elif defined _M_X64
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#else
-#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-#endif
-#endif
 
 

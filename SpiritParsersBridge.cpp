@@ -26,10 +26,7 @@ bool KiCadParse( std::ifstream& in, PCBoard* pBoard )
 
 	bool r= qi::phrase_parse( begin, end, p, skipper, wrapper );
 
-	if( r )
-		return PostKicadParse( pBoard );
-
-	return r;
+	return r && PostKicadParse(pBoard);
 }
 
 bool Accel15Parse( std::ifstream& in, PCBoard* pBoard )
@@ -52,16 +49,13 @@ bool Accel15Parse( std::ifstream& in, PCBoard* pBoard )
 	
 	bool r= qi::phrase_parse( begin, end, pcb_parser, skipper, wrapper );
 
-	if( r )
-		return PostKicadParse( pBoard );
-
-	return r;
+	return r && PostKicadParse(pBoard);
 }
 
 // ...........................................................................
 namespace boost {
 
-	std::wostream& operator<<(std::wostream& out, const value& v )
+	std::ostream& operator<<(std::ostream& out, const value& v )
 	{
 		switch( v.which( ) )
 		{
@@ -79,7 +73,7 @@ namespace boost {
 		return out;
 	}
 
-	std::wostream& operator<<(std::wostream& out, const values& v )
+	std::ostream& operator<<(std::ostream& out, const values& v )
 	{
 		out << "size: " << v.size( ) << " '";
 		for(auto it= v.begin( ); it != v.end( ); ++it )
@@ -90,7 +84,7 @@ namespace boost {
 		return out;
     }
 
-    std::wostream& operator<<(std::wostream& out, const pair_type& v)
+    std::ostream& operator<<(std::ostream& out, const pair_type& v)
 	{
 		out << " '" << v.first << "' ";
 		if( v.second.size( ) )

@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Linux helpers
+/CMakeCache.txt
+CMakeFiles/
+Makefile
+*.cmake
+compile_commands.json
+/sotest
+/tags
+.*.swp
